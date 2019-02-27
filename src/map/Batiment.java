@@ -1,7 +1,6 @@
 package map;
 
 abstract class Batiment extends ObjetMap{
-
     private String type;
     private int nbMatConstruct;
     private int[] matConstruct;
@@ -42,17 +41,17 @@ abstract class Batiment extends ObjetMap{
         this.matConstruct = matConstruct;
     }
 
-    public Batiment() {
-        super();
-        setStatut(new String[] {"Crée", "En cours de fabrication","Operationnel", "Probleme" , "Detruit"});
-        setStatutEncours(statut[0]);
-    }
-
     public String getStatutEncours() {
         return statutEncours;
     }
 
     public void setStatutEncours(String statutEncours) {
         this.statutEncours = statutEncours;
+    }
+
+    public Batiment() {
+        super();
+        setStatut(new String[] {"Crée", "En cours de fabrication","Operationnel", "Probleme" , "Detruit"});
+        setStatutEncours(statut[0]);
     }
 }
