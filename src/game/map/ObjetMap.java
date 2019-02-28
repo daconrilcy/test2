@@ -1,8 +1,8 @@
-package map;
+package game.map;
 
 public abstract class ObjetMap {
 
-    static int index;
+    private static int index;
     private int largeur;
     private int longueur;
     private int resistance;
