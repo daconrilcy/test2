@@ -1,6 +1,8 @@
-package map;
+package map.batiment;
 
-abstract class Batiment extends ObjetMap{
+import map.ObjetMap;
+
+abstract class Batiment extends ObjetMap {
     private String type;
     private int nbMatConstruct;
     private int[] matConstruct;

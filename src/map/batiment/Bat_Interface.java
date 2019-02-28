@@ -1,4 +1,4 @@
-package map;
+package map.batiment;
 
 public interface Bat_Interface {
     public Batiment creerBatiment(String type , int longueur , int largeur , int[] nbMateriaux );

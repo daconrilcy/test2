@@ -1,4 +1,4 @@
-package map;
+package map.batiment;
 
 public class Bat_Implement implements Bat_Interface {
     Batiment[] bats;

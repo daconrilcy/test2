@@ -1,6 +1,6 @@
 package map;
 
-abstract class ObjetMap {
+public abstract class ObjetMap {
 
     static int index;
     private int largeur;

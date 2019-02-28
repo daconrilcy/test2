@@ -1,6 +1,6 @@
 package com.cc.test;
 
-import map.Bat_Implement;
+import map.batiment.Bat_Implement;
 
 public class Main {
 
