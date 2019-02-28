@@ -1,7 +1,7 @@
 package game.map.ressources;
 
 public abstract class Types_Ressources {
-    Ressource[] liste;
+    private Ressource[] liste;
 
     public Ressource[] getListe() {
         return liste;

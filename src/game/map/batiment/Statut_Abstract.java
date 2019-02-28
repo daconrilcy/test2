@@ -1,9 +1,9 @@
 package game.map.batiment;
 
 public class Statut_Abstract {
-    String[] liste = {"Null" , "Cree" , "En construction" , "En production" , "A l'arrêt" , "En destruction"};
-    String enCoursVal;
-    int enCoursIndex;
+    private String[] liste = {"Null" , "Cree" , "En construction" , "En production" , "A l'arrêt" , "En destruction"};
+    private String enCoursVal;
+    private int enCoursIndex;
 
     public String[] getListe() {
         return liste;
