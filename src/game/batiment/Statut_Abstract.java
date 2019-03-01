@@ -1,4 +1,4 @@
-package game.map.batiment;
+package game.batiment;
 
 public class Statut_Abstract {
     private String[] liste = {"Null" , "Cree" , "En construction" , "En production" , "A l'arrêt" , "En destruction"};

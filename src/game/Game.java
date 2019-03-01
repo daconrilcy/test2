@@ -1,11 +1,20 @@
 package game;
 
-import game.map.batiment.Bat_Factory;
-import game.map.ressources.Types_Ressources;
+import game.batiment.Bat_Factory;
+import game.ressources.Types_Ressources;
 
 public class Game implements game_factory{
     private Types_Ressources types_Ressources;
-    private Bat_Factory batiments;
+    private Bat_Factory GestionBatiments;
+
+    public Types_Ressources getTypes_Ressources() {
+        return types_Ressources;
+    }
+
+    public Bat_Factory getGestionBatiments() {
+        return GestionBatiments;
+    }
+
     @Override
     public void creerTypeRessource() {
         this.types_Ressources = new Types_Ressources(){};
@@ -13,7 +22,7 @@ public class Game implements game_factory{
 
     @Override
     public void creerBatimentFactory() {
-        batiments = new Bat_Factory(types_Ressources);
+        GestionBatiments = new Bat_Factory(types_Ressources);
     }
 
     public Game() {

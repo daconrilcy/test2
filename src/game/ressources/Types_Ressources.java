@@ -1,4 +1,4 @@
-package game.map.ressources;
+package game.ressources;
 
 public abstract class Types_Ressources {
     private Ressource[] liste;

@@ -1,7 +1,6 @@
-package game.map.batiment;
+package game.batiment;
 
 import game.map.ObjetMap;
-import game.map.ressources.Ressource;
 
 abstract class Batiment extends ObjetMap {
     private String type;

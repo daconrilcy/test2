@@ -1,6 +1,6 @@
-package game.map.batiment;
+package game.batiment;
 
-import game.map.ressources.Ressource;
+import game.ressources.Ressource;
 
 abstract public class Materiaux_Construct {
     private Ressource[] listeMateriaux;
@@ -12,6 +12,22 @@ abstract public class Materiaux_Construct {
     public Ressource[] getListeMateriaux() {
         return listeMateriaux;
     }
+
+    public String getListeMateriauxToString(){
+        String listeMat = "";
+        for (int n = 0 ; n < listeMateriaux.length ; n++){
+            listeMat += quantiteMateriaux[n] + "x";
+           listeMat += listeMateriaux[n].getNom();
+           if (n < listeMateriaux.length - 1 ){
+               listeMat += ", ";
+           }
+           if (n == listeMateriaux.length - 1 ){
+               listeMat += ".";
+           }
+        }
+
+        return listeMat;
+    };
 
     public void setListeMateriaux(Ressource[] listeMateriaux) {
         this.listeMateriaux = listeMateriaux;
@@ -30,10 +46,11 @@ abstract public class Materiaux_Construct {
     }
 
     public void ajouterMateriaux(Ressource materiaux , int quantite){
-        if (rgAjoutMateriaux < nbMateriaux){
+        if (rgAjoutMateriaux <= nbMateriaux){
             listeMateriaux[rgAjoutMateriaux] = materiaux;
             quantiteMateriaux[rgAjoutMateriaux] = quantite;
         }
+        rgAjoutMateriaux++;
     }
 
 

@@ -1,4 +1,4 @@
-package game.map.ressources;
+package game.ressources;
 
 import java.awt.*;
 
