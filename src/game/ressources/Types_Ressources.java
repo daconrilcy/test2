@@ -1,6 +1,6 @@
 package game.ressources;
 
-public abstract class Types_Ressources {
+public abstract class Types_Ressources extends Ressource{
     private Ressource[] liste;
 
     public Ressource[] getListe() {
@@ -30,9 +30,13 @@ public abstract class Types_Ressources {
         int[] rang = {0,0,1,1,2,2};
         int l = nom.length;
 
+
         Ressource[] list;
 
         liste = new Ressource[6];
+        for (int n = 0 ; n < l ; n++){
+            liste[n].setTypeId(n);
+        }
 
         for (int n=0; n < l ; n++){
             liste[n] = new Ressource(nom[n] , taille , rang[n]) { };

@@ -7,11 +7,11 @@ public abstract class Ressource {
     private String nom;
     private int taille;
     private int rangFabric;
+    private int typeId;
 
     public Ressource() {
 
     }
-
 
     public Image getPict() {
         return pict;
@@ -43,6 +43,14 @@ public abstract class Ressource {
 
     public void setRangFabric(int rangFabric) {
         this.rangFabric = rangFabric;
+    }
+
+    public int getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
     }
 
     public Ressource(String nom) {
