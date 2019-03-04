@@ -7,7 +7,8 @@ public class View {
 
     private JFrame frame;
     private JTextField txField;
-    private JButton button;
+    private myJbutton[] buttons;
+    private String[] nomButton = new String[]{"Petite Carte", "Moyenne Carte" , "Grande Carte"};
 
     public JFrame getFrame() {
         return frame;
@@ -25,25 +26,33 @@ public class View {
         this.txField = txField;
     }
 
-    public JButton getButton() {
-        return button;
+    public String[] getNomButton() {
+        return nomButton;
+    }
+    public myJbutton[] getButtons(){
+      return buttons;
+    };
+
+    private void creerBoutons(){
+        buttons = new myJbutton[nomButton.length];
+        for (int n = 0 ; n < nomButton.length ; n++){
+            buttons[n] = new myJbutton(nomButton[n], nomButton[n]);
+            frame.getContentPane().add(buttons[n]);
+        }
     }
 
-    public void setButton(JButton button) {
-        this.button = button;
-    }
-
-    public View(){
+    public void dessinne(){
+        System.out.println("dessine");
         frame = new JFrame("My Settlers");
-        txField = new JTextField();
-        txField.setColumns(10);
-        button = new JButton("Create");
-
         frame.setLayout(new FlowLayout());
-        frame.getContentPane().add(txField);
-        frame.getContentPane().add(button);
+        creerBoutons();
 
         frame.setVisible(true);
         frame.pack();
+
+    }
+
+    public View (){
+       dessinne();
     }
 }

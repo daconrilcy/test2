@@ -53,6 +53,12 @@ public abstract class Ressource {
         this.typeId = typeId;
     }
 
+    public String toString(){
+        System.out.println(" id : "+ this.getTypeId() + " Ressource "+ this.getNom() + " - Rang : "+ this.getRangFabric() + " - Taille en stock : "+ this.getTaille() );
+
+        return null;
+    }
+
     public Ressource(String nom) {
         this.nom = nom;
         setTaille(1);
@@ -71,11 +77,12 @@ public abstract class Ressource {
         this.rangFabric = rangFabric;
     }
 
-    public Ressource(Image pict, String nom, int taille, int rangFabric) {
-        this.pict = pict;
+    public Ressource(String nom, int taille, int rangFabric , int typeId) {
+        //this.pict = pict;
         this.nom = nom;
         this.taille = taille;
         this.rangFabric = rangFabric;
+        this.typeId = typeId;
     }
 
 
