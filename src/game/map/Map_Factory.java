@@ -33,7 +33,7 @@ public class Map_Factory {
         }
     }
 
-    public void creerMapdeBaseAvecNom(int longueur , int largeur , String nom){
+    public void creerMap(int longueur , int largeur , String nom){
         creerMap(longueur ,largeur);
         map.setNomMap(nom);
         System.out.println("Nom de la carte : " + nom);
@@ -41,6 +41,15 @@ public class Map_Factory {
 
     public void CreerMapAleatoire(int longueur , int largeur , double proportionMer){
         creerMap(longueur, largeur);
+        map.setCases(case_map_factory.creerCaseViergeSelonDimension(largeur , longueur));
+        int coupureMerAngle = (int)(Math.random()*360);
+        for (int n = 0 ; n < map.getTailleCarte() ; n++){
+            Ressource res = obtenirRessourceBaseAleatoire();
+        }
+    }
+
+    public void CreerMapAleatoire(int longueur , int largeur , double proportionMer , String nom){
+        creerMap(longueur, largeur ,nom);
         map.setCases(case_map_factory.creerCaseViergeSelonDimension(largeur , longueur));
         int coupureMerAngle = (int)(Math.random()*360);
 
