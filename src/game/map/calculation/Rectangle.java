@@ -1,4 +1,4 @@
-package game.map.map.calculation;
+package game.map.calculation;
 
 public class Rectangle {
     private double xG;
