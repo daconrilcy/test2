@@ -1,5 +1,18 @@
 package game.map.calculation;
 
+
+/********
+
+           A
+           *
+          **
+        ** *
+       *   *
+     **    *
+    *      *
+ B ********* C
+
+**********/
 public class TriangleRectangle {
     private CoordonneesDbl A;
     private CoordonneesDbl B;
@@ -229,6 +242,34 @@ public class TriangleRectangle {
         Center.y = hauteur/2;
     }
 
+    public void transformerH(){
+        A.transformH(Center.x);
+        B.transformH(Center.x);
+        C.transformH(Center.x);
+        if (isSymetrieH) {
+            isSymetrieH = false;
+        }else {
+            isSymetrieH = true;
+        }
+    }
+
+    public void transformerV(){
+        A.transformV(Center.y);
+        B.transformV(Center.y);
+        C.transformV(Center.y);
+        if (isSymetrieV){
+            isSymetrieV = false;
+        }else{
+            isSymetrieV = true;
+        }
+    }
+
+    public void move(double x, double y){
+        A.move(x,y);
+        B.move(x,y);
+        C.move(x,y);
+        Center.move(x,y);
+    }
     public void redefineAngleB(double angleB){
         double anglT;
         anglT = angleB;
@@ -239,27 +280,19 @@ public class TriangleRectangle {
         }
         if (anglT >= 0 && anglT < Math.PI/2){
             setAngleB(anglT);
-            setRotation(0);
-            setSymetrieH(false);
-            setSymetrieV(false);
         }
         if (anglT > Math.PI/2 && anglT <= Math.PI){
             anglT = Math.PI - anglT;
-            setRotation(0);
-            setSymetrieH(true);
-            setSymetrieV(false);
+            transformerH();
         }
         if (anglT > Math.PI && anglT <= 3/2*Math.PI){
             anglT = anglT-Math.PI;
-            setRotation(0);
-            setSymetrieH(true);
-            setSymetrieV(true);
+            transformerH();
+            transformerV();
         }
         if (anglT > 3/2 * Math.PI && anglT <= 2 * Math.PI){
             anglT = 2*Math.PI-anglT;
-            setRotation(0);
-            setSymetrieH(false);
-            setSymetrieV(true);
+            transformerV();
         }
         setAngleB(anglT);
     }
