@@ -1,30 +1,29 @@
 package game.map.calculation;
 
-
 /********
 
-           A
+ B*********C
+   **      *
+     *     *
+      **   *
+        *  *
+         ***
            *
-          **
-        ** *
-       *   *
-     **    *
-    *      *
- B ********* C
-
+           A
 **********/
 public class TriangleRectangle {
     private CoordonneesDbl A;
     private CoordonneesDbl B;
     private CoordonneesDbl C;
-    private CoordonneesDbl Center;
+    private CoordonneesDbl center;
     private double longueur;
     private double hauteur;
     private double hypothenuse;
     private double surface;
-    private double angleA;
-    private double angleB;
-    private double angleC;
+    private Angle angleA;
+    private Angle angleB;
+    private Angle angleBInitial;
+    private Angle angleC;
     private double rotation;
     private boolean isSymetrieH;
     private boolean isSymetrieV;
@@ -56,11 +55,17 @@ public class TriangleRectangle {
     }
 
     public void setCenter(CoordonneesDbl center) {
-        Center = center;
+        center = center;
+    }
+    public void setCenterSelonABCDefault(){
+        double x,y;
+        x = C.x-B.x;
+        y = C.y-A.y;
+        center = new CoordonneesDbl(x,y);
     }
 
     public CoordonneesDbl getCenter() {
-        return Center;
+        return center;
     }
 
 
@@ -96,31 +101,40 @@ public class TriangleRectangle {
         this.surface = surface;
     }
 
-    public double getAngleA() {
+    public Angle getAngleA() {
         return angleA;
     }
 
-    public void setAngleA(double angleA) {
-        this.angleA = angleA;
+    public void setAngleA(double angleEnRad) {
+        this.angleA = new  Angle(angleEnRad);
     }
 
-    public double getAngleB() {
+    public Angle getAngleB() {
         return angleB;
     }
     public double getAngleBenDeg(){
-        return angleB/Math.PI*180;
+        return angleB.valDeg();
     }
 
-    public void setAngleB(double angleB) {
-        this.angleB = angleB;
+    public void setAngleB(double angleEnRad) {
+        this.angleBInitial = new Angle(angleEnRad);
+        this.angleB = new Angle(angleBInitial.anglePI2());
+        this.isSymetrieV = angleBInitial.AnglePI2isTransV();
+        this.isSymetrieH = angleBInitial.AnglePI2isTransH();
+    }
+    public void setAngleB(Angle angleEnRad) {
+        this.angleBInitial = angleEnRad;
+        this.angleB = new Angle(angleEnRad.anglePI2());
+        this.isSymetrieV = angleEnRad.AnglePI2isTransV();
+        this.isSymetrieH = angleEnRad.AnglePI2isTransH();
     }
 
-    public double getAngleC() {
+    public Angle getAngleC() {
         return angleC;
     }
 
-    public void setAngleC(double angleC) {
-        this.angleC = angleC;
+    public void setAngleC() {
+        this.angleC = new Angle(Math.PI/2);
     }
 
     public double getRotation() {
@@ -154,13 +168,13 @@ public class TriangleRectangle {
         creerCoordonneeDefaultHL();
         setAngleA(0);
         setAngleB(0);
-        setAngleC(Math.PI/2);
+        setAngleC();
         setRotation(0);
         setSymetrieH(false);
         setSymetrieV(false);
-
     }
     public TriangleRectangle(double longueur, double hauteur){
+        setAngleC();
         setLongueur(longueur);
         setHauteur(hauteur);
         setRotation(0);
@@ -169,6 +183,18 @@ public class TriangleRectangle {
         calculHypothenuseHL();
         defineAngleHL();
         creerCoordonneeDefaultHL();
+    }
+    public TriangleRectangle(double surface , Angle angleEnRad){
+        setAngleC();
+        setAngleB(angleEnRad);
+        setAngleA(Math.PI-angleC.valRad()-angleB.valRad());
+        setSurface(surface);
+        if (angleB.sin()!=0&& angleB.cos() != 0){
+            longueur = Math.sqrt(Math.abs(2*surface*angleB.cos()/angleEnRad.sin()));
+            hauteur = Math.abs(longueur/angleB.cos()*angleB.sin());
+            calculHypothenuseHL();
+            setCoordonneeDefaultHL();
+        }
     }
 
     public void setTriangleSurfaceLongueur(double surface, double longueur){
@@ -191,17 +217,20 @@ public class TriangleRectangle {
             setCoordonneeDefaultHL();
         }
     }
-    public void setTriangleSurfaceAngleB(double surface , double angleB){
+    public void setTriangleSurfaceValAngleB(double surface , double angleEnRad){
         setSurface(surface);
-        redefineAngleB(angleB);
-        double sinB = Math.sin(angleB);
-        double cosB = Math.cos(angleB);
-        if (cosB != 0 ){
-          longueur = Math.sqrt(Math.abs(2*surface*cosB/sinB));
-          hypothenuse = longueur/cosB;
-          hauteur = hypothenuse*sinB;
+        setAngleB(angleEnRad);
+
+        if (angleB.cos() != 0 ){
+          longueur = Math.sqrt(Math.abs(2*surface*angleB.cos()/angleB.sin()));
+          calculHypothenuseCosLongueur();
+          hauteur = Math.abs(hypothenuse*angleB.sin());
+        }else{
+            setLongueur(0);
+            setHauteur(surface);
+            setSurface(0);
         }
-        angleA = Math.PI-angleB-angleC;
+        angleA = new Angle(Math.PI-angleB.valRad()-angleC.valRad());
         setCoordonneeDefaultHL();
     }
 
@@ -215,52 +244,97 @@ public class TriangleRectangle {
         calculHypothenuseHL();
         if (hypothenuse !=0){
             cosB = longueur/hypothenuse;
-            angleB = Math.acos(cosB);
-            angleA = Math.PI-angleB-angleC;
+            setAngleC();
+            setAngleB(Math.acos(cosB));
+            setAngleA(Math.PI-angleB.valRad()-angleC.valRad());
         }
     }
 
     public void calculHypothenuseHL(){
         hypothenuse = Math.sqrt(Math.pow(longueur,2)+ Math.pow (hauteur, 2));
     }
+    private void calculHypothenuseCosLongueur(){
+        if (angleB.cos() !=0) {
+            hypothenuse = Math.abs(longueur / angleB.cos());
+        }else{
+            hypothenuse = 0;
+        }
+    }
+    private void calculHypothenuseSinHauteur(){
+        if (angleB.sin() != 0) {
+            hypothenuse = Math.abs(hauteur / angleB.sin());
+        }else {
+            hypothenuse = 0;
+        }
+    }
 
     public void creerCoordonneeDefaultHL(){
         A = new CoordonneesDbl(longueur,0);
         B = new CoordonneesDbl(0,hauteur);
         C = new CoordonneesDbl(longueur,hauteur);
-        Center = new CoordonneesDbl(longueur/2,hauteur/2);
+        setCenterSelonABCDefault();
     }
 
     public void setCoordonneeDefaultHL(){
         A.x = longueur;
-        A.y = 0;
+        A.y = hauteur;
         B.x = 0;
-        B.y = hauteur;
+        B.y = 0;
         C.x = longueur;
-        C.y = hauteur;
-        Center.x = longueur/2;
-        Center.y = hauteur/2;
+        C.y = 0;
+        setCenterSelonABCDefault();
     }
 
     public void transformerH(){
-        A.transformH(Center.x);
-        B.transformH(Center.x);
-        C.transformH(Center.x);
+        A.transformH(center.x);
+        B.transformH(center.x);
+        C.transformH(center.x);
         if (isSymetrieH) {
             isSymetrieH = false;
         }else {
             isSymetrieH = true;
         }
+        transfoHAngle();
+    }
+    private void transfoHAngle(){
+        double pi = Math.PI;
+        angleB = new Angle(pi-angleB.valRad());
+        angleC = new Angle(pi-angleC.valRad());
+        angleA = new Angle(pi-angleA.valRad());
     }
 
     public void transformerV(){
-        A.transformV(Center.y);
-        B.transformV(Center.y);
-        C.transformV(Center.y);
+        A.transformV(center.y);
+        B.transformV(center.y);
+        C.transformV(center.y);
         if (isSymetrieV){
             isSymetrieV = false;
         }else{
             isSymetrieV = true;
+        }
+        transfoVAngle();
+    }
+    private void transfoVAngle(){
+        double pi2 = 2*Math.PI;
+        double anglB = pi2-angleB.valRad();
+        double anglC = pi2-angleC.valRad();
+        double anglA = pi2-angleA.valRad();
+
+        angleB = new Angle(anglB);
+        angleC = new Angle(anglC);
+        angleA = new Angle(anglA);
+    }
+
+    public void transformerHV(){
+        transformerH();
+        transformerV();
+    }
+    public void annulerTransfoHV(){
+        if (isSymetrieH){
+            transformerH();
+        }
+        if (isSymetrieV){
+            transformerV();
         }
     }
 
@@ -268,32 +342,44 @@ public class TriangleRectangle {
         A.move(x,y);
         B.move(x,y);
         C.move(x,y);
-        Center.move(x,y);
+        center.move(x,y);
     }
-    public void redefineAngleB(double angleB){
-        double anglT;
-        anglT = angleB;
-        if (angleB > 2* Math.PI){
-            while (anglT <= 2* Math.PI){
-                anglT -= 2*Math.PI;
-            }
-        }
-        if (anglT >= 0 && anglT < Math.PI/2){
-            setAngleB(anglT);
-        }
-        if (anglT > Math.PI/2 && anglT <= Math.PI){
-            anglT = Math.PI - anglT;
-            transformerH();
-        }
-        if (anglT > Math.PI && anglT <= 3/2*Math.PI){
-            anglT = anglT-Math.PI;
-            transformerH();
-            transformerV();
-        }
-        if (anglT > 3/2 * Math.PI && anglT <= 2 * Math.PI){
-            anglT = 2*Math.PI-anglT;
-            transformerV();
-        }
-        setAngleB(anglT);
+
+    public void moveCenterTo(double x , double y){
+        double difx,dify;
+        difx = x - center.x;
+        dify = y - center.y;
+        move(difx , dify);
+    }
+    public void moveBTo(double x , double y){
+        double difx,dify;
+        difx = x - B.x;
+        dify = y - B.y;
+        move(difx , dify);
+    }
+    public void moveBTo(CoordonneesDbl point){
+        double difx,dify;
+        difx = point.x - B.x;
+        dify = point.y - B.y;
+        move(difx , dify);
+    }
+
+    public void moveATo(double x, double y){
+        double difx,dify;
+        difx = x - A.x;
+        dify = y - A.y;
+        move(difx , dify);
+    }
+    public void moveCTo(double x , double y){
+        double difx,dify;
+        difx = x - C.x;
+        dify = y - C.y;
+        move(difx , dify);
+    }
+    public void moveCTo(CoordonneesDbl point){
+        double difx,dify;
+        difx = point.x - C.x;
+        dify = point.y - C.y;
+        move(difx , dify);
     }
 }

@@ -1,53 +1,83 @@
 package game.map.calculation;
 
+/***************
+
+ A ---------D
+ |          |
+ |          |
+ |          |
+ B----------C
+
+
+****************/
+
 public class Rectangle {
-    private double xG;
-    private double yH;
-    private double xD;
-    private double yB;
+    private CoordonneesDbl A;
+    private CoordonneesDbl B;
+    private CoordonneesDbl C;
+    private CoordonneesDbl D;
+    private CoordonneesDbl center;
     private double longueur;
     private double hauteur;
-    private double angleBaseA;
-    private double angleBaseB;
-    private double angleBaseC;
-    private double angleBaseD;
-    private double centerX;
-    private double centerY;
-    private double surface;
     private double diagonale;
-    private double cosA;
-    private double sinA;
+    private Angle angleBase;
+    private double surface;
 
-    public double getxG() {
-        return xG;
+    public CoordonneesDbl getA() {
+        return A;
     }
 
-    public void setxG(double xG) {
-        this.xG = xG;
+    private void setA(CoordonneesDbl a) {
+        A = a;
+    }
+    private void setA(double x, double y){
+        A = setCoordonneeXY(x,y);
     }
 
-    public double getyH() {
-        return yH;
+    public CoordonneesDbl getB() {
+        return B;
     }
 
-    public void setyH(double yH) {
-        this.yH = yH;
+    private void setB(CoordonneesDbl b) {
+        B = b;
     }
 
-    public double getxD() {
-        return xD;
+    private void setB(double x, double y){
+        B = setCoordonneeXY(x,y);
     }
 
-    public void setxD(double xD) {
-        this.xD = xD;
+    public CoordonneesDbl getC() {
+        return C;
     }
 
-    public double getyB() {
-        return yB;
+    private void setC(CoordonneesDbl c) {
+        C = c;
+    }
+    private void setC(double x, double y){
+        C = setCoordonneeXY(x,y);
     }
 
-    public void setyB(double yB) {
-        this.yB = yB;
+    public CoordonneesDbl getD() {
+        return D;
+    }
+
+    private void setD(CoordonneesDbl d) {
+        D = d;
+    }
+    private void setD(double x, double y){
+        D = setCoordonneeXY(x,y);
+    }
+
+    public CoordonneesDbl getCenter() {
+        return center;
+    }
+
+    private void setCenter(CoordonneesDbl center) {
+        this.center = center;
+    }
+
+    private void setCenter(double x, double y){
+        center = setCoordonneeXY(x,y);
     }
 
     public double getLongueur() {
@@ -66,44 +96,45 @@ public class Rectangle {
         this.hauteur = hauteur;
     }
 
-    public void setAngleBaseA(double angleBaseA) {
-        this.angleBaseA = angleBaseA;
-        angleBaseB = Math.PI - angleBaseA;
-        angleBaseC = Math.PI+ angleBaseA;
-        angleBaseD = 2*Math.PI - angleBaseA;
+    public double getDiagonale() {
+        return diagonale;
     }
 
-    public double getAngleBaseA() {
-        return angleBaseA;
+    private void setDiagonale(double diagonale) {
+        this.diagonale = diagonale;
     }
 
-
-    public double getAngleBaseB() {
-        return angleBaseB;
+    public void setDiagonale(){
+        diagonale = Math.sqrt(Math.pow(longueur,2)+Math.pow(hauteur,2));
     }
 
-    public double getAngleBaseC() {
-        return angleBaseC;
+    public Angle getAngleBase() {
+        return angleBase;
     }
 
-    public double getAngleBaseD() {
-        return angleBaseD;
+    public void setAngleBase(Angle angleBase) {
+        this.angleBase = angleBase;
+    }
+    private void setAngleBase(){
+        double sina,cosa,angl,anglP;
+        if (diagonale == 0){
+            setDiagonale();
+        }
+        if (longueur !=0){
+            cosa = diagonale/longueur;
+            angl = Math.acos(cosa);
+        }else if (hauteur !=0){
+            sina = diagonale/hauteur;
+            angl = Math.asin(sina);
+        }else {
+            angl = 0;
+        }
+        anglP = new Angle(angl).anglePI2();
+        setAngleBase(new Angle(anglP));
     }
 
-    public double getCenterX() {
-        return centerX;
-    }
-
-    public void setCenterX(double centerX) {
-        this.centerX = centerX;
-    }
-
-    public double getCenterY() {
-        return centerY;
-    }
-
-    public void setCenterY(double centerY) {
-        this.centerY = centerY;
+    private CoordonneesDbl setCoordonneeXY(double x, double y){
+        return new CoordonneesDbl(x,y);
     }
 
     public double getSurface() {
@@ -114,135 +145,108 @@ public class Rectangle {
         this.surface = surface;
     }
 
-    public double getDiagonale() {
-        return diagonale;
-    }
-
-    public void setDiagonale(double diagonale) {
-        this.diagonale = diagonale;
-    }
-
-    public double getCosA() {
-        return cosA;
-    }
-
-    public double getSinA() {
-        return sinA;
-    }
-
-    Rectangle(){
+    public Rectangle(){
         setLongueur(0);
         setHauteur(0);
         setDiagonale(0);
-        setCoinHautGauche(0,0);
+        setAngleBase(new Angle(0));
+        setABCDCenterDefault();
+        setSurface(0);
     }
 
-    Rectangle(double longueur , double hauteur){
+    public Rectangle(double longueur , double hauteur){
         setLongueur(longueur);
         setHauteur(hauteur);
         setSurface(longueur*hauteur);
-        calculTailleDiagonaleLH();
-        calculAngleBaseLH();
-        setCoinHautGauche(0,0);
+        setDiagonale();
+        setABCDCenterDefault();
+        setAngleBase();
     }
 
-    public void calculTailleDiagonaleLH(){
-        this.diagonale = Math.sqrt(Math.pow(longueur,2)+Math.pow(hauteur,2));
+    private void setABCDCenterDefault(){
+        setA(0,0);
+        setB(0,hauteur);
+        setC(longueur,hauteur);
+        setD(longueur,0);
+        setCenterFonctionABCD();
+    }
+    private void setCenterFonctionABCD(){
+        double x,y;
+        x = C.x - A.x;
+        y = B.y - A.y;
+        setCenter(x,y);
     }
 
-    public void calculAngleBaseLH(){
-        if (hauteur !=0 && longueur !=0){
-            if (diagonale == 0){
-                calculTailleDiagonaleLH();
-            }
-            cosA = longueur/diagonale;
-            sinA = hauteur/diagonale;
-            setAngleBaseA(Math.acos(cosA));
-        }
+    public void move(double x, double y){
+        center.x += x;
+        center.y += y;
+        A.x +=x;
+        A.y +=y;
+        B.x +=x;
+        B.y +=y;
+        C.x +=x;
+        C.y +=y;
+        D.x +=x;
+        D.y +=y;
     }
-
-    public void setSurfaceHauteur(double surface , double hauteur){
-        setSurface(surface);
-        setHauteur(hauteur);
-        if (hauteur !=0) {
-            setLongueur(surface / hauteur);
-            calculTailleDiagonaleLH();
-            calculAngleBaseLH();
-        }
+    public void moveAto(double x, double y){
+        double difx,difY;
+        difx = x-A.x;
+        difY = y-A.y;
+        move(difx,difY);
     }
-
-    public void setSurfaceLongueur(double surface , double longueur){
-        setSurface(surface);
-        setLongueur(longueur);
-        if (longueur != 0 ){
-            setHauteur(surface/longueur);
-            calculTailleDiagonaleLH();
-            calculAngleBaseLH();
-        }
+    public void moveAto(CoordonneesDbl pointCible){
+        double difx,difY;
+        difx = pointCible.x-A.x;
+        difY = pointCible.y-A.y;
+        move(difx,difY);
     }
-
-    public void setCenter(double x, double y){
-        double halfLongueur, halfHauteur;
-        setCenterX(x);
-        setCenterY(y);
-        halfLongueur = longueur/2;
-        halfHauteur = hauteur/2;
-        setxG(x-halfLongueur);
-        setxD(x+halfLongueur);
-        setyB(y+halfHauteur);
-        setyH(y-halfHauteur);
-
+    public void moveBto(double x, double y){
+        double difx,difY;
+        difx = x-B.x;
+        difY = y-B.y;
+        move(difx,difY);
     }
-    public void setCoinHautGauche(double x , double y){
-        double halfLongueur, halfHauteur;
-        halfLongueur = longueur/2;
-        halfHauteur = hauteur/2;
-        setxG(x);
-        setyH(y);
-        setyB(y+hauteur);
-        setxD(x+longueur);
-        setCenterX(x+halfLongueur);
-        setCenterY(y+halfHauteur);
-
+    public void moveBto(CoordonneesDbl pointCible){
+        double difx,difY;
+        difx = pointCible.x-B.x;
+        difY = pointCible.y-B.y;
+        move(difx,difY);
     }
-    public void setCoinHautDroit(double x , double y){
-        double halfLongueur, halfHauteur;
-        halfLongueur = longueur/2;
-        halfHauteur = hauteur/2;
-        setxD(x);
-        setyH(y);
-        setyB(y+hauteur);
-        setxG(x-longueur);
-        setCenterX(x-halfLongueur);
-        setCenterY(y+halfHauteur);
+    public void moveCto(double x, double y){
+        double difx,difY;
+        difx = x-C.x;
+        difY = y-C.y;
+        move(difx,difY);
     }
-    public void setCoinBasGauche(double x , double y){
-        double halfLongueur, halfHauteur;
-        halfLongueur = longueur/2;
-        halfHauteur = hauteur/2;
-        setxG(x);
-        setyB(y);
-        setyH(y-hauteur);
-        setxD(x+longueur);
-        setCenterX(x+halfLongueur);
-        setCenterY(y-halfHauteur);
+    public void moveCto(CoordonneesDbl pointCible){
+        double difx,difY;
+        difx = pointCible.x-C.x;
+        difY = pointCible.y-C.y;
+        move(difx,difY);
     }
-    public void setCoinBasDroit(double x , double y){
-        double halfLongueur, halfHauteur;
-        halfLongueur = longueur/2;
-        halfHauteur = hauteur/2;
-        setxD(x);
-        setyB(y);
-        setyH(y-hauteur);
-        setxG(x-longueur);
-        setCenterX(x-halfLongueur);
-        setCenterY(y-halfHauteur);
+    public void moveDto(double x, double y){
+        double difx,difY;
+        difx = x-D.x;
+        difY = y-D.y;
+        move(difx,difY);
     }
-    public boolean estDanslaSurface(double x, double y){
-        if (x >= xG && x<= xD && y <= yB && y >= yH){
-            return true;
-        } else {
-            return false;
-        }
+    public void moveDto(CoordonneesDbl pointCible){
+        double difx,difY;
+        difx = pointCible.x-D.x;
+        difY = pointCible.y-D.y;
+        move(difx,difY);
+    }
+    public void moveCenterTo(double x, double y){
+        double difx,difY;
+        difx = x-center.x;
+        difY = y-center.y;
+        move(difx,difY);
+    }
+    public void moveCenterTo(CoordonneesDbl pointCible){
+        double difx,difY;
+        difx = pointCible.x-center.x;
+        difY = pointCible.y-center.y;
+        move(difx,difY);
     }
 }
