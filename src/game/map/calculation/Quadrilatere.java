@@ -1,7 +1,5 @@
 package game.map.calculation;
 
-import javax.security.auth.login.AccountNotFoundException;
-
 /****************
  *
  *           --E
@@ -18,8 +16,6 @@ import javax.security.auth.login.AccountNotFoundException;
  *
  *
  */
-
-
 
 public class Quadrilatere {
     private TriangleRectangle triangle;
@@ -42,7 +38,91 @@ public class Quadrilatere {
     private double surfTriangle;
     private double surfMini, surfMaxi;
     private String forme;
-    static final String[] typeForme = {"triangle","rectangle","quadrilatere","triangleInverse","indetermine"};
+    private static final String[] typeForme = {"triangle","rectangle","quadrilatere","triangleInverse","indetermine"};
+
+    public TriangleRectangle getTriangle() {
+        return triangle;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public Rectangle getConteneur() {
+        return conteneur;
+    }
+
+    public double getSurface() {
+        return surface;
+    }
+
+    public Angle getAngle() {
+        return angle;
+    }
+
+    public boolean isRectangleNull() {
+        return isRectangleNull;
+    }
+
+    public boolean isTriangleNull() {
+        return isTriangleNull;
+    }
+
+    public boolean isInverse() {
+        return isInverse;
+    }
+
+    public CoordonneesDbl getA() {
+        return A;
+    }
+
+    public CoordonneesDbl getB() {
+        return B;
+    }
+
+    public CoordonneesDbl getC() {
+        return C;
+    }
+
+    public CoordonneesDbl getD() {
+        return D;
+    }
+
+    public CoordonneesDbl getE() {
+        return E;
+    }
+
+    public CoordonneesDbl getCenter() {
+        return center;
+    }
+
+    public int getQuadrantAngle() {
+        return quadrantAngle;
+    }
+
+    public boolean isCoteLongueur() {
+        return isCoteLongueur;
+    }
+
+    public double getSurfRect() {
+        return surfRect;
+    }
+
+    public double getSurfTriangle() {
+        return surfTriangle;
+    }
+
+    public double getSurfMini() {
+        return surfMini;
+    }
+
+    public double getSurfMaxi() {
+        return surfMaxi;
+    }
+
+    public String getForme() {
+        return forme;
+    }
 
     public Quadrilatere(){
         triangle = new TriangleRectangle();
@@ -161,7 +241,7 @@ public class Quadrilatere {
                     default:
                         rectangle.moveCenterTo(conteneur.getCenter());
                 }
-            case 1: case 8: case 2: case3:
+            case 1: case 8: case 2: case 3:
                 rectangle.moveDto(conteneur.getD());
                 break;
             case 4: case 5: case 6: case 7:
@@ -249,11 +329,7 @@ public class Quadrilatere {
         int i = conteneur.getAngleBase().comparaisonAngleQuadran(this.angle);
         switch (i) {
             case 0:
-                if (Math.abs(this.angle.cos()) == 1) {
-                    isCoteLongueur = true;
-                } else {
-                    isCoteLongueur = false;
-                }
+                isCoteLongueur = Math.abs(this.angle.cos()) == 1;
                 break;
             case 1: case 4: case 5: case 8:
                 isCoteLongueur = true;
@@ -263,16 +339,16 @@ public class Quadrilatere {
     }
     private void setTriangleVsAngleSurface(){
         TriangleRectangle t;
-        if (forme == typeForme[0]){
+        if (forme.equals(typeForme[0])){
             t = new TriangleRectangle(surface , angle);
-        }else if (forme == typeForme[2]) {
+        }else if (forme.equals(typeForme[2])) {
             t = new TriangleRectangle();
             if (isCoteLongueur) {
                 t.setTriangleLongueurAngle(conteneur.getLongueur(), angle.valRad());
             } else {
                 t.setTriangleHauteurAngle(conteneur.getHauteur(), angle.valRad());
             }
-        }else if (forme == typeForme[3]){
+        }else if (forme.equals(typeForme[3])){
             double s = conteneur.getSurface()-surface;
             t = new TriangleRectangle(s , angle);
         }else {
@@ -283,7 +359,7 @@ public class Quadrilatere {
     private void setRectangleApresTriangle(){
         double surf = surface- triangle.getSurface();
         if (!isRectangleNull){
-            if (forme == typeForme[1]){
+            if (forme.equals(typeForme[1])){
                 if (isCoteLongueur){
                     if (conteneur.getLongueur() != 0) {
                         double h = surface / conteneur.getLongueur();
@@ -299,7 +375,7 @@ public class Quadrilatere {
                         setRectangle(new Rectangle(0,0));
                     }
                 }
-            }else if (forme == typeForme[2]){
+            }else if (forme.equals(typeForme[2])){
                 if (isCoteLongueur){
                     if (conteneur.getLongueur() != 0) {
                         double h = surf / conteneur.getLongueur();
