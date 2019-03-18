@@ -122,11 +122,11 @@ public class TriangleRectangle {
         this.isSymetrieV = angleBInitial.AnglePI2isTransV();
         this.isSymetrieH = angleBInitial.AnglePI2isTransH();
     }
-    public void setAngleB(Angle angleEnRad) {
-        this.angleBInitial = angleEnRad;
-        this.angleB = new Angle(angleEnRad.anglePI2());
-        this.isSymetrieV = angleEnRad.AnglePI2isTransV();
-        this.isSymetrieH = angleEnRad.AnglePI2isTransH();
+    public void setAngleB(Angle angle) {
+        this.angleBInitial = angle;
+        this.angleB = new Angle(angle.anglePI2());
+        this.isSymetrieV = angle.AnglePI2isTransV();
+        this.isSymetrieH = angle.AnglePI2isTransH();
     }
 
     public Angle getAngleC() {
@@ -233,6 +233,32 @@ public class TriangleRectangle {
         angleA = new Angle(Math.PI-angleB.valRad()-angleC.valRad());
         setCoordonneeDefaultHL();
     }
+    public void setTriangleLongueurAngle(double longueur , double angleEnRad){
+        setAngleB(angleEnRad);
+        setAngleC();
+        setRotation(0);
+        if (angleB.cos() != 0){
+            setLongueur(longueur);
+            setHauteur(Math.abs(longueur/angleB.cos()*angleB.sin()));
+            setAngleA(Math.PI-angleB.valRad()-angleC.valRad());
+            calculHypothenuseHL();
+            calculSurfaceHL();
+            setCoordonneeDefaultHL();
+        }
+    }
+    public void setTriangleHauteurAngle(double hauteur , double angleEnRad) {
+        setAngleB(angleEnRad);
+        setAngleC();
+        setRotation(0);
+        if (angleB.sin() != 0) {
+            setHauteur(Math.abs(hauteur));
+            setLongueur(Math.abs(hauteur / angleB.sin() * angleB.cos()));
+            setAngleA(Math.PI - angleB.valRad() - angleC.valRad());
+            calculHypothenuseHL();
+            calculSurfaceHL();
+            setCoordonneeDefaultHL();
+        }
+    }
 
     public void calculSurfaceHL(){
         surface = longueur*hauteur/2;
@@ -307,11 +333,7 @@ public class TriangleRectangle {
         A.transformV(center.y);
         B.transformV(center.y);
         C.transformV(center.y);
-        if (isSymetrieV){
-            isSymetrieV = false;
-        }else{
-            isSymetrieV = true;
-        }
+        isSymetrieV = !isSymetrieV;
         transfoVAngle();
     }
     private void transfoVAngle(){

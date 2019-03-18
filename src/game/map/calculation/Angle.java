@@ -186,22 +186,21 @@ public class Angle {
                 anglePI2isTransH = false;
                 anglePI2isTransV = false;
                 return angleEnRad;
-
             case 1:
                 anglePI2isTransH = false;
                 anglePI2isTransV = false;
                 return angleEnRad;
             case 2:
-                anglePI2isTransH = true;
-                anglePI2isTransV = false;
+                anglePI2isTransH = false;
+                anglePI2isTransV = true;
                 return Math.PI-angleEnRad;
             case 3:
                 anglePI2isTransH = true;
                 anglePI2isTransV = true;
                 return angleEnRad-Math.PI;
             case 4:
-                anglePI2isTransH = false;
-                anglePI2isTransV = true;
+                anglePI2isTransH = true;
+                anglePI2isTransV = false;
                 return 2*Math.PI - angleEnRad;
             default:
                 anglePI2isTransH = false;
